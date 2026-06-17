@@ -6,6 +6,7 @@ from aiogram.filters import Command, CommandObject
 import json
 from config import TOKEN
 import utils
+from handlers import owner
 
 router = Router()
 
@@ -85,9 +86,9 @@ async def unmute(message: Message, command: CommandObject):
 
 
 
-@router.message(F.text) #Должна быть предпоследней!
+"""@router.message(F.text) #Должна быть предпоследней!
 async def echo(message: Message):
-    await message.answer(f"Вы написали {message.text}")
+    await message.answer(f"Вы написали {message.text}")"""
 
 
 async def main():
@@ -95,6 +96,7 @@ async def main():
     bot = Bot(token=TOKEN)
     dp = Dispatcher()
     dp.include_router(router)
+    dp.include_router(owner.router)
     await dp.start_polling(bot)
 asyncio.run(main()) # Должна быть последней!
 

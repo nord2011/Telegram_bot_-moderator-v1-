@@ -81,18 +81,36 @@ def remove_from_banned(user_id):
     return False
 
 def is_moderator(user_id):
-    owner = load_roles()["owner"]
+    owner = load_roles()["owners"]
     admin = load_roles()["admins"]
     moderators = load_roles()["moderators"]
     return user_id in owner or user_id in admin or user_id in moderators
 
 def is_admin(user_id):
     admin = load_roles()["admins"]
-    owner = load_roles()["owner"]
+    owner = load_roles()["owners"]
     return user_id in owner or user_id in admin
 
 def is_owner(user_id):
-    owner = load_roles()["owner"]
+    owner = load_roles()["owners"]
     return user_id in owner
 
+def get_target(message):
+    if message.reply_to_message:
+        user = message.reply_to_message.from_user
+        return user.id, user.full_name
+    parts = message.text.split()
+    if len(parts) < 2:
+        return None, None
+    user_name = parts[1].replace("@", "")
+    return None, user_name
 
+def get_roles_name(user_id):
+    if is_owner(user_id):
+        return "Владелец"
+    elif is_admin(user_id):
+        return "Админ"
+    elif is_moderator(user_id):
+        return "Модератор"
+    else:
+        return "Пользователь/Участник"
