@@ -1,7 +1,6 @@
 import json
 import os
 
-from Telegram_Bot.Python_Bot import add_admin
 
 ROLES_FILE =  "data/roles.json"
 BANNED_FILE = "data/banned.json"
@@ -27,7 +26,32 @@ def add_admin_in_list(user_id, append_id, rank):
     if rank > 3 or rank == 0:
         print("Неверный ранг")
         return False
-    pass
+
+
+"""@router.message(Command('add_admin'))
+async def add_admin(message: Message, command: CommandObject):
+    # command.args содержит аргументы (через пробел в команде написано)
+    args = command.args
+    try:
+        user = message.from_user.id
+        user_adding = str(args[0]) + str(args[1]) + str(args[2]) + str(args[3]) + str(args[4]) + str(args[5]) + str(args[6]) + str(args[7]) + str(args[8]) + str(args[9])
+        try:
+            user_adding = user_adding + str(args[10])
+            rank = int(args[11])
+        except:
+            rank = int(args[10])
+        if not user_adding and rank:
+            await message.answer("Вы ничего не ввели (id юзера или ранг)")
+        if utils.is_owner(user, 3):
+            utils.add_admin_in_list(user, user_adding, rank)
+            print(f"Добавлен админ [{user}]")
+        else:
+            print(f"Недостаточно прав [{user}]")
+    except Exception as e:
+        print("Ошибка, не верно ввели")
+        print(e)"""
+
+
 
 
 def load_banned():
@@ -71,9 +95,4 @@ def is_owner(user_id):
     owner = load_roles()["owner"]
     return user_id in owner
 
-print(add_to_banned(12345))
-print(load_banned())
-print(add_to_banned(56789))
-print(load_banned())
-print(remove_from_banned(12345))
-print(load_banned())
+
