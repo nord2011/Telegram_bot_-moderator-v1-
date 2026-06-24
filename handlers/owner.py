@@ -33,7 +33,7 @@ async def roles(message: Message):
     list_roles = f"Список админов:"
     a = 1
     for member in loaded_roles:
-        user_data = utils.get_user_info(TOKEN,member)
+        user_data = utils.get_user_info(member, TOKEN)
         if utils.get_roles_name(member) == "Владелец":
             list_roles =+ f"\n{a}. [{user_data["first_name"]}](tg://user?id={member}) Владелец"
             a += 1

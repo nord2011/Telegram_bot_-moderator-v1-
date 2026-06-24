@@ -1,9 +1,17 @@
+import asyncio
+import random
+from aiogram import Bot, Dispatcher, Router, F
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.filters import Command, CommandObject
 import json
+from config import TOKEN
 import os
 from typing import Optional, Dict, Any
 
 ROLES_FILE =  "data/roles.json"
 BANNED_FILE = "data/banned.json"
+
+dp = Dispatcher()
 
 def load_roles():
     if not os.path.exists(ROLES_FILE):
@@ -130,7 +138,7 @@ def get_roles_name(user_id):
     else:
         return "Пользователь/Участник"
 
-async def get_user_info(bot: Any, user_id: int) -> Dict[str,Any]:
+async def get_user_info(user_id: int, bot: Any) -> Dict[str, Any]:
     try:
         user = await bot.get_chat(user_id)
 
