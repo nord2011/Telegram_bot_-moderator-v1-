@@ -8,6 +8,9 @@ from config import TOKEN
 import os
 from typing import Optional, Dict, Any
 
+
+bot = Bot(token=TOKEN)
+
 ROLES_FILE =  "data/roles.json"
 BANNED_FILE = "data/banned.json"
 
@@ -138,10 +141,14 @@ def get_roles_name(user_id):
     else:
         return "Пользователь/Участник"
 
-async def get_user_info(user_id: int, bot: Any) -> Dict[str, Any]:
-    try:
-        user = await bot.get_chat(user_id)
 
+async def get_user_info(bot,chat_id,user_id):
+    try:
+        member = await bot.get_chat_member(chat_id,user_id)
+        user = member.user
+        name = user.full_name
+        print(user)
+        print(name)
         return {
             "id": user.id,
             "first_name": user.first_name,

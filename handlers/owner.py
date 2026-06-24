@@ -28,24 +28,31 @@ async def save_list(message: Message):
         print(f"Недостаточно прав [{user}]")
 
 @router.message(Command("roles"))
-async def roles(message: Message):
+async def roles(message: Message, bot: Bot):
     loaded_roles = utils.load_roles()
+    chat_id = message.chat.id
+    print(loaded_roles)
     list_roles = f"Список админов:"
     a = 1
-    for member in loaded_roles:
-        user_data = utils.get_user_info(member, TOKEN)
-        if utils.get_roles_name(member) == "Владелец":
-            list_roles =+ f"\n{a}. [{user_data["first_name"]}](tg://user?id={member}) Владелец"
-            a += 1
-            return
-        if utils.get_roles_name(member) == "Админ":
-            list_roles += f"\n{a}. [{user_data["first_name"]}](tg://user?id={member}) Админ"
-            a += 1
-            return
-        if utils.get_roles_name(member) == "Модератор":
-            list_roles += f"\n{a}. [{user_data["first_name"]}](tg://user?id={member}) Модератор"
-            a += 1
-            return
+    for role in loaded_roles["owners"]:
+        user_data = await utils.get_user_info(bot,chat_id,role)
+        print(user_data)
+        list_roles += f"\n{a}. [{user_data["full_name"]}](tg://user?id={role}) Владелец"
+        a += 1
+    for role in loaded_roles["admins"]:
+        user_data = await utils.get_user_info(bot,chat_id,role)
+        print(user_data)
+        list_roles += f"\n{a}. [{user_data["full_name"]}](tg://user?id={role}) Админ"
+        a += 1
+
+    for role in loaded_roles["moderators"]:
+        user_data = await utils.get_user_info(bot,chat_id,role)
+        print(user_data)
+        list_roles += f"\n{a}. [{user_data["full_name"]}](tg://user?id={role}) Модератор"
+        a += 1
+
+
+
     print(list_roles)
-    await message.answer(list_roles, parse_mode='MarkdownV2')
+    await message.answer(list_roles, parse_mode='Markdown')
 
