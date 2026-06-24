@@ -1,6 +1,6 @@
 import json
 import os
-
+from typing import Optional, Dict, Any
 
 ROLES_FILE =  "data/roles.json"
 BANNED_FILE = "data/banned.json"
@@ -26,6 +26,21 @@ def add_admin_in_list(user_id, append_id, rank):
     if rank > 3 or rank == 0:
         print("Неверный ранг")
         return False
+    if rank == 1:
+        role_list = moderators + admin + owner
+        role_list[moderators].append(append_id)
+        save_roles(role_list)
+        return True
+    if rank == 2:
+        role_list = moderators + admin + owner
+        role_list[admin].append(append_id)
+        save_roles(role_list)
+        return True
+    if rank == 3:
+        role_list = moderators + admin + owner
+        role_list[owner].append(append_id)
+        save_roles(role_list)
+        return True
 
 
 """@router.message(Command('add_admin'))
@@ -114,3 +129,22 @@ def get_roles_name(user_id):
         return "Модератор"
     else:
         return "Пользователь/Участник"
+
+async def get_user_info(bot: Any, user_id: int) -> Dict[str,Any]:
+    try:
+        user = await bot.get_chat(user_id)
+
+        return {
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "username": user.username,
+            "full_name": user.full_name,}
+    except Exception as e:
+        return {
+            "id": user_id,
+            "first_name": None,
+            "last_name": None,
+            "username": None,
+            "full_name": None}
+
